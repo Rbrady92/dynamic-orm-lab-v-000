@@ -5,14 +5,14 @@ class InteractiveRecord
   attr_accessor
 
   def initialize(columns={})
-    columns.each do |prop, value| 
+    columns.each do |prop, value|
       self.send("#{prop}=", value)
-    end 
-  end 
+    end
+  end
 
   def self.table_name
     self.to_s.downcase.pluralize
-  end 
+  end
 
   def self.column_names
     DB[:conn].results_as_hash = true
@@ -20,19 +20,19 @@ class InteractiveRecord
     sql = "pragma table_info('#{table_name}')"
     table_info = DB[:conn].execute(sql)
     columns = []
-    
-    table_info.each do |col| 
+
+    table_info.each do |col|
       columns << col["name"]
-    end 
+    end
     columnns.compact
-  end 
+  end
 
   def self.table_name_for_insert
     self.class.table_name
-  end 
+  end
 
   def self.column_names_for_insert
     self.class.column_names.delete_if {|col| col == "id"}.join(", ")
-  end 
-  
+  end
+
 end
