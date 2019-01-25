@@ -39,25 +39,25 @@ class InteractiveRecord
     values = []
 
     self.class.column_names.each do |col|
-      values << "'#{send(col)}'" unless send(col).nil? 
-    end 
-    
+      values << "'#{send(col)}'" unless send(col).nil?
+    end
+
     values.join(", ")
-  end 
+  end
 
   def save
     sql = "INSERT INTO #{table_name} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
     DB[:conn].execute(sql)
     @id = DB[:conn].execute("SELECT insert_last_rowid() FROM #{table_name_for_insert}")[0][0]
-  end 
+  end
 
   def self.find_by_name(name)
     sql = "SELECT * FROM #{self.table_name} WHERE name = ?"
     DB[:conn].execute(sql, "#{name}")
-  end 
+  end
 
   def self.find_by(col)
     sql = "SELECT * FROM #{self.table_name} WHERE #{col} = "
-  end 
-  
+  end
+
 end
